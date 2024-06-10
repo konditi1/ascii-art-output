@@ -9,7 +9,7 @@ import (
 // Color takes words a slice of string from a certain index, joins the words,
 // parameters: colorflag string, lettersTocolor string, argsPassed []string, bannerContent []string
 // and calls the Ascii function to print the words in ascii-art
-func Color(colorflag string, lettersTocolor string, argsPassed []string, bannerContent []string) {
+func Color(colorflag string, lettersTocolor string, argsPassed []string, bannerContent []string, outputflag string) {
 	var str string
 	var err error
 	var colorCode string
@@ -52,10 +52,10 @@ func Color(colorflag string, lettersTocolor string, argsPassed []string, bannerC
 	}
 
 	if len(argsPassed) == 1 {
-		Art(argsPassed, bannerContent, lettersTocolor, colorCode, 0)
+		Art(argsPassed, bannerContent, lettersTocolor, colorCode, 0, outputflag)
 	} else if len(argsPassed) == 2 {
 		lettersTocolor = argsPassed[0]
-		Art(argsPassed, bannerContent, lettersTocolor, colorCode, 1)
+		Art(argsPassed, bannerContent, lettersTocolor, colorCode, 1, outputflag)
 	} else {
 		fmt.Println("Usage: go run . --color=<color> <letters to be colored> \"something\"")
 		return

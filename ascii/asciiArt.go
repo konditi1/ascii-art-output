@@ -2,6 +2,7 @@ package ascii
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -11,7 +12,7 @@ import (
 // wordsArr (a slice of strings representing the words to be printed),
 // lettersToColor (a string representing the letters to be colored),
 // and color (a string representing the color to be applied).
-func Ascii(fileArr []string, wordsArr []string, lettersToColor string, colorCode string) {
+func Ascii(fileArr []string, wordsArr []string, lettersToColor string, colorCode string, outputflag string) {
 	var count int
 	reset := "\033[0m"
 
@@ -21,19 +22,61 @@ func Ascii(fileArr []string, wordsArr []string, lettersToColor string, colorCode
 				for _, v := range val {
 					start := (v - 32) * 9
 					if len(lettersToColor) == 0 {
-						fmt.Print(colorCode + fileArr[int(start)+i] + reset)
+						if IsFlagPassed("output") {
+							err := os.WriteFile(outputflag, []byte(fileArr[int(start)+i]), 0644)
+							if err != nil {
+								fmt.Println(err)
+								return
+							}
+						} else {
+							fmt.Print(colorCode + fileArr[int(start)+i] + reset)
+						}
+
 					} else if strings.Contains(lettersToColor, string(v)) {
-						fmt.Print(colorCode + fileArr[int(start)+i] + reset)
+						if IsFlagPassed("output") {
+							err := os.WriteFile(outputflag, []byte(fileArr[int(start)+i]), 0644)
+							if err != nil {
+								fmt.Println(err)
+								return
+							}
+						} else {
+							fmt.Print(colorCode + fileArr[int(start)+i] + reset)
+						}
 					} else {
-						fmt.Print(fileArr[int(start)+i])
+						if IsFlagPassed("output") {
+							err := os.WriteFile(outputflag, []byte(fileArr[int(start)+i]), 0644)
+							if err != nil {
+								fmt.Println(err)
+								return
+							}
+						} else {
+							fmt.Print(fileArr[int(start)+i])
+						}
 					}
 				}
-				fmt.Println()
+
+				if IsFlagPassed("output") {
+					err := os.WriteFile(outputflag, []byte("\n"), 0644)
+					if err != nil {
+						fmt.Println(err)
+						return
+					}
+				} else {
+					fmt.Println()
+				}
 			}
 		} else {
 			count++
 			if count < len(wordsArr) {
-				fmt.Println()
+				if IsFlagPassed("output") {
+					err := os.WriteFile(outputflag, []byte("\n"), 0644)
+					if err != nil {
+						fmt.Println(err)
+						return
+					}
+				} else {
+					fmt.Println()
+				}
 			}
 		}
 	}
